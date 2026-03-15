@@ -1,0 +1,17 @@
+# depslib dependency file v1.0
+1773550309 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\classes\doublelinkedlist.cpp
+
+1773550897 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\classes\linkedlist.cpp
+	<iostream>
+
+1773550378 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\classes\queue.cpp
+
+1773550359 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\classes\stack.cpp
+
+1773552045 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\main.cpp
+	<iostream>
+
+1773550826 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\headers\linkedlist.h
+
+1773551349 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\structures.cpp
+
