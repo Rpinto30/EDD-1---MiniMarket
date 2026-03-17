@@ -1,27 +1,46 @@
 #include <iostream>
+#include "Headers/structs.h"
 
 using namespace std;
+using namespace structures;
 
-typedef struct Cart{
-    int id;
-} Cart;
+class waitClientCart : protected LinkedList<Client>{
+private:
+     void printData(ClientNode* node) override{
+       cout<<" - Cliente: "<< node->data.idClient << " en espera de un carrito..."<<endl;
+    }
 
-typedef struct CashRegister{
-    int id;
-} CashRegister;
+public:
+     ClientNode* createNode(){
+        ClientNode * new_node = new ClientNode;
+        new_node->next = nullptr;
+        return new_node;
+    }
 
-template <typename T>
-struct Node{
-    T data;
-    struct Node* next;
-    struct Node* prev;
+    void add(){
+        ClientNode* new_node = createNode();
+        insert(new_node);
+        //delete new_node;
+    }
+
+
+
+    void print(){
+        showList();
+    }
+
+
+
 };
-
-typedef Node<Cart> CartNode;
 
 
 int main()
 {
-    CartNode{ Cart{1} };
+    waitClientCart list_;
+    list_.add();
+    list_.print();
     return 0;
 }
+
+
+
