@@ -23,15 +23,13 @@ public:
         //delete new_node;
     }
 
-
-
     void print(){
         showList();
     }
 
-
-
 };
+
+
 
 
 int main()
