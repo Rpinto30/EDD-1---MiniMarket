@@ -2,8 +2,9 @@
 #define STRUCTS_H
 
 namespace structures{
+
     typedef struct Cart{
-        int id;
+        int idCart;
     } Cart;
 
     typedef struct CashRegister{
@@ -11,7 +12,6 @@ namespace structures{
         float timeService;
         int state;
         int idClient;
-        int idCart;
     } CashRegister;
 
     typedef struct Client{
@@ -20,6 +20,7 @@ namespace structures{
 
     template <typename T>
     struct Node{
+        int id;
         T data;
         struct Node* next;
     };
@@ -27,6 +28,7 @@ namespace structures{
 
     template <typename T>
     struct BiNode{
+        int id;
         T data;
         struct BiNode* next;
         struct BiNode* prev;
@@ -36,6 +38,7 @@ namespace structures{
     //DECLARAR ESTRUCTURAS POR TYPEDEF
     typedef Node<Cart> CartNode;
     typedef Node<Client> ClientNode;
+    typedef Node<Client> ClientBuying;
 
     template <typename T>
     class LinkedList{
@@ -96,10 +99,20 @@ namespace structures{
             }
         }
 
+        ~LinkedList(){
+            struct Node<T>* temp;
+            while (head) {
+                temp = head;
+                head = head->next;
+                delete temp;
+            }
+
+        }
+
     };
 
     /*LISTA DOBLE ENLAZADA*/
-        template <typename T>
+    template <typename T>
     class DoubleLinkedList{
     protected:
         struct BiNode<T>* head = nullptr;
@@ -162,6 +175,8 @@ namespace structures{
             }
         }
 
+        //Lo del metodo desctructor lo investigue de: https://medium.com/@RobuRishabh/beginners-guide-to-linked-list-in-c-d8445ef906ab
+
     };
 
     /*LISTA DOBLE CIRCULAR*/
@@ -196,7 +211,7 @@ namespace structures{
         }
     };
 
-     /*CREAR PILAS Y COLAS (L.D.E)*/
+    //PILA
     template <typename T>
     class Stack : protected LinkedList<T>{
         using LinkedList<T>::head;
@@ -212,15 +227,28 @@ namespace structures{
 
         void pop(){
             //eliminar el ultimo
-            struct Node<T>* temp = head;
-            while(temp->next != nullptr){
-                temp = temp->next;
+            if (head == nullptr) return;
+
+            if (head->next == nullptr){
+                delete head;
+                head = nullptr;
             }
-            delete temp;
+            else{
+                struct Node<T>* temp = head;
+                struct Node<T>* prev = head;
+                while(temp->next != nullptr){
+                    prev = temp;
+                    temp = temp->next;
+                }
+
+                prev->next = nullptr;
+                delete temp;
+            }
         }
 
      };
 
+    //COLA
     template <typename T>
     class Queue : protected LinkedList<T>{
         using LinkedList<T>::head;
