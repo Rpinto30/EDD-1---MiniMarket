@@ -1,9 +1,20 @@
 # depslib dependency file v1.0
-1773984151 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\main.cpp
+1774076587 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\main.cpp
 	<iostream>
-	"Headers/structs.h"
+	"gui.h"
+	"structs.h"
+	<windows.h>
+	<thread>
 
 1773722696 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\structs\structs.cpp
 
-1773984381 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\headers\structs.h
+1774067406 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\headers\structs.h
+
+1774067406 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\structs.h
+
+1774075414 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\visualmodule.cpp
+	<windows.h>
+
+1774076665 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\gui.h
+	<windows.h>
 

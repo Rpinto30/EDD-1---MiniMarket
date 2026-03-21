@@ -2,25 +2,24 @@
 #define STRUCTS_H
 
 namespace structures{
-
     typedef struct Cart{
-        int idCart;
+        int idCart = 0;
     } Cart;
 
     typedef struct CashRegister{
-        int idCart;
-        float timeService;
-        int state;
+        int idCashRegister = 0;
+        float timeService = 0.0;
+        int state = 0;
         int idClient;
     } CashRegister;
 
     typedef struct Client{
-        int idClient;
+        int idClient = 0;
     } Client;
 
     template <typename T>
     struct Node{
-        int id;
+        int id = 0;
         T data;
         struct Node* next;
     };
@@ -39,6 +38,7 @@ namespace structures{
     typedef Node<Cart> CartNode;
     typedef Node<Client> ClientNode;
     typedef Node<Client> ClientBuying;
+    typedef BiNode<CashRegister> CashRegisterNode;
 
     template <typename T>
     class LinkedList{
@@ -176,7 +176,15 @@ namespace structures{
         }
 
         //Lo del metodo desctructor lo investigue de: https://medium.com/@RobuRishabh/beginners-guide-to-linked-list-in-c-d8445ef906ab
+        ~DoubleLinkedList(){
+            struct BiNode<T>* temp;
+            while (head) {
+                temp = head;
+                head = head->next;
+                delete temp;
+            }
 
+        }
     };
 
     /*LISTA DOBLE CIRCULAR*/
@@ -208,6 +216,15 @@ namespace structures{
                 return 0;
             }
             return 1;
+        }
+
+        ~DoubleCircleList(){
+            struct BiNode<T>* temp = head;
+            do{
+                struct BiNode<T>* deleter = temp;
+                temp = temp->next;
+                delete deleter;
+            } while(temp->next == head);
         }
     };
 
@@ -246,14 +263,14 @@ namespace structures{
             }
         }
 
-     };
+    };
 
     //COLA
     template <typename T>
     class Queue : protected LinkedList<T>{
         using LinkedList<T>::head;
         public:
-          struct Node<T>* back(){
+            struct Node<T>* back(){
             struct Node<T>* temp = head;
             while(temp->next != nullptr){
                 temp = temp->next;
@@ -262,10 +279,9 @@ namespace structures{
         }
 
         public:
-          struct Node<T>* peek(){
+            struct Node<T>* peek(){
             return head;
         }
-
 
         struct Node<T>* dequeue(){
             struct Node<T>* temp = head;
@@ -273,7 +289,6 @@ namespace structures{
             head = head->next;
             return temp;
         }
-
     };
 
 }
