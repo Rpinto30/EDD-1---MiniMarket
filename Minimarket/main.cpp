@@ -1,8 +1,10 @@
 #include <iostream>
-#include "gui.h"
-#include "structs.h"
 #include <windows.h>
 #include <thread>
+
+#include "gui.h"
+#include "structs.h"
+#include "dotGenerator.h"
 
 using namespace std;
 using namespace structures;
@@ -142,17 +144,17 @@ void simulacion(){
     }
 }
 
+/*------------------------------------------------MAIN--------------------------------------------------*/
 int main()
 {
     Window win;
-
     // HILOS: https://www.geeksforgeeks.org/cpp/multithreading-in-cpp/
     thread console_thread(simulacion);
     console_thread.detach();
 
     return win.run();
 }
-
+/*------------------------------------------------MAIN--------------------------------------------------*/
 
 // INICALIZACION DE CANTIDADES
 void createClients(){
