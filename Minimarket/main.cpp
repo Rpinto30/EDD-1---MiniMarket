@@ -113,8 +113,8 @@ private:
 
     void afterInsertAction(CartNode* temp) override{ //el nombre siempre es tittle_id
         if(temp->next != nullptr){
-            string nodeA = tittle + to_string(temp->data.idCart-1);
-            string nodeB = tittle + to_string(temp->next->data.idCart-1);
+            string nodeA = tittle +"_"+ to_string(temp->data.idCart);
+            string nodeB = tittle +"_"+ to_string(temp->next->data.idCart);
             graph.simpleConnectNode(nodeA, nodeB);
         }
     }

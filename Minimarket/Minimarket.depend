@@ -1,8 +1,9 @@
 # depslib dependency file v1.0
-1774174064 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\main.cpp
+1774174791 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\main.cpp
 	<iostream>
 	<windows.h>
 	<thread>
+	<string>
 	"gui.h"
 	"structs.h"
 	"dotGenerator.h"
@@ -11,7 +12,7 @@
 
 1774067406 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\headers\structs.h
 
-1774174156 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\structs.h
+1774174233 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\structs.h
 
 1774075414 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\visualmodule.cpp
 	<windows.h>
