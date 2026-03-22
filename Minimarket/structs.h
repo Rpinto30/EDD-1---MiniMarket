@@ -33,7 +33,6 @@ namespace structures{
         struct BiNode* prev;
     };
 
-
     //DECLARAR ESTRUCTURAS POR TYPEDEF
     typedef Node<Cart> CartNode;
     typedef Node<Client> ClientNode;
@@ -50,6 +49,8 @@ namespace structures{
             return 0;
         }
 
+        virtual void afterInsertAction(struct Node<T>* temp) {};
+
         int insert(struct Node<T>* new_node){
             if (checkList() == 1){
                 head = new_node;
@@ -61,7 +62,9 @@ namespace structures{
                 while(temp->next != nullptr){
                     temp = temp->next;
                 }
+
                 temp->next = new_node;
+                afterInsertAction(temp);
                 return 0;
             }
             return 1;
@@ -70,7 +73,7 @@ namespace structures{
         struct Node<T>* getByIndex(int index){
             if (checkList() == 0){
                 struct Node<T>* temp = head;
-                while(temp->next != nullptr){
+                while(temp != nullptr){
                     if (temp->id == index){
                         return temp;
                     }
@@ -142,10 +145,10 @@ namespace structures{
             return 1;
         }
 
-        struct Node<T>* getByIndex(int index){
+        struct BiNode<T>* getByIndex(int index){
             if (checkList() == 0){
                 struct Node<T>* temp = head;
-                while(temp->next != nullptr){
+                while(temp != nullptr){
                     if (temp->id == index){
                         return temp;
                     }
@@ -155,23 +158,22 @@ namespace structures{
             return nullptr;
         }
 
-        struct Node<T>* getFirst(){
+        struct BiNode<T>* getFirst(){
             if (checkList() ==0 ){
                 return head;
             }
             return nullptr;
         };
 
-        virtual void printData(struct Node<T>* node) {};
+        virtual void printData(struct BiNode<T>* node) {};
 
         void showList(){
             if (checkList() == 0){
                 struct Node<T>* temp = head;
-                do {
+                while (temp != nullptr) {
                     printData(temp);
                     temp = temp->next;
-                }while (temp != head);
-
+                }
             }
         }
 
@@ -219,12 +221,14 @@ namespace structures{
         }
 
         ~DoubleCircleList(){
+            if (head == nullptr) return;
+
             struct BiNode<T>* temp = head;
             do{
                 struct BiNode<T>* deleter = temp;
                 temp = temp->next;
                 delete deleter;
-            } while(temp->next == head);
+            } while(temp == head);
         }
     };
 
@@ -235,6 +239,8 @@ namespace structures{
 
      public:
         struct Node<T>* peek(){
+            if (head == nullptr) return nullptr;
+
             struct Node<T>* temp = head;
             while(temp->next != nullptr){
                 temp = temp->next;
@@ -284,9 +290,11 @@ namespace structures{
         }
 
         struct Node<T>* dequeue(){
+            if (head == nullptr) return nullptr;
+
             struct Node<T>* temp = head;
-            temp->next = nullptr;
             head = head->next;
+            temp->next = nullptr;
             return temp;
         }
     };

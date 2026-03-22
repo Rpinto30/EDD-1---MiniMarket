@@ -1,0 +1,17 @@
+digraph MiniMarket {
+subgraph cluster_Pila_1{
+label="Pila_1"
+Pila_1_0[label="0"];
+Pila_1_1[label="1"];
+
+}
+
+subgraph cluster_Pila_2{
+label="Pila_2"
+Pila_2_0[label="0"];
+Pila_2_1[label="1"];
+
+}
+
+
+}

@@ -32,9 +32,10 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="Headers/drawManager.h" />
-		<Unit filename="Headers/structs.h" />
+		<Unit filename="dotGenerator.h" />
+		<Unit filename="gui.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="structs.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

@@ -1,14 +1,20 @@
 #include <iostream>
 #include <windows.h>
 #include <thread>
+#include <string>
 
 #include "gui.h"
 #include "structs.h"
 #include "dotGenerator.h"
 
+/*VARIABLES EN EL SCOPE GLOBAL*/
+//DotFile dot;
+
+
 using namespace std;
 using namespace structures;
 using namespace window;
+using namespace dotGenerator;
 
 class ClientManager : private LinkedList<Client> {
     private:
@@ -22,7 +28,7 @@ public:
         return new_node;
     }
 
-    void queueClient(){
+    void addClient(){
         ClientNode* new_node = createNode();
         insert(new_node);
     }
@@ -37,6 +43,11 @@ public:
 class WaitClientCart : private Queue<Client>{
 private:
     int globalID = 1;
+
+    WaitClientCart(){
+
+    }
+
      void printData(ClientNode* node) override{
        cout<<" - Cliente: "<< node->data.idClient << " en espera de un carrito..."<<endl;
     }
@@ -57,7 +68,6 @@ public:
     void print(){
         showList();
     }
-
 };
 
 // COLA ESPERAR CAJA
@@ -90,14 +100,33 @@ public:
 // Stack
 class StackCart : private Stack<Cart>{
 private:
+    string tittle;
+    SubGraph graph;
     int globalID = 0;
     CartNode* createNode(){
         CartNode * new_node = new CartNode;
         new_node->data.idCart = globalID++;
         new_node->next = nullptr;
+        graph.insertNode(new_node->data.idCart);
         return new_node;
     }
+
+    void afterInsertAction(CartNode* temp) override{ //el nombre siempre es tittle_id
+        if(temp->next != nullptr){
+            string nodeA = tittle + to_string(temp->data.idCart-1);
+            string nodeB = tittle + to_string(temp->next->data.idCart-1);
+            graph.simpleConnectNode(nodeA, nodeB);
+        }
+    }
+
 public:
+    StackCart(string tittle){
+        graph.changeName(tittle);
+        this->tittle = tittle;
+    }
+
+    SubGraph * getGraph() { return &graph;}
+
     void add(){
         CartNode* new_node = createNode();
         insert(new_node);
@@ -128,23 +157,43 @@ public:
 int initializerValue(string type);
 void createClients();
 void createCarts();
+void graphIntoDotFile();
 
-/*VARIABLES EN EL SCOPE GLOBAL*/
-ClientManager client_mg;
+//ESTRUCTURAS DIRECTAS DEL PROYECTO
 ListCashRegister cash_registers;
 
-StackCart carts_stk_1;
-StackCart carts_stk_2;
+StackCart carts_stk_1("Pila_1");
+StackCart carts_stk_2("Pila_2");
 
-void simulacion(){
+//ESTRUCTURAS ADICIONALES, PERO IGUAL USAN MIS EDD
+ClientManager client_mg;
+DotFile dot_file;
+
+/*------------------------------------------------MAIN--------------------------------------------------*/
+
+// Este meotdo lo uso para hacer la simulacion de manera async con la ventana (modulo visible)
+void simulacion()
+{
     createCarts();
+    graphIntoDotFile();
+    dot_file.updateSubGraphs();
+    int r = dot_file.generateFile();
+    if (r == 0) {
+
+        cout<<" $ .dot generado correctamente"<<endl;
+    } else{
+        cout<<" $ .dot ha falldo al generarse"<<endl;
+    }
+
+
     while(true){
-      cout<<"Hola";
-        Sleep(150);
+
+        cout<<"LO LOGREEEEEE  ";
+        Sleep(1500);
     }
 }
 
-/*------------------------------------------------MAIN--------------------------------------------------*/
+
 int main()
 {
     Window win;
@@ -160,7 +209,7 @@ int main()
 void createClients(){
     int n = initializerValue("Clientes");
     for(int i = 0; i < n; i++){
-        client_mg.queueClient();
+        client_mg.addClient();
     }
 }
 
@@ -168,7 +217,7 @@ void createCarts(){
     int m = initializerValue("Carritos");
     for(int i = 0; i < m; i++){
         carts_stk_1.add();
-        carts_stk_1.add();
+        carts_stk_2.add();
     }
 }
 
@@ -177,6 +226,12 @@ void createCashRegisters(){
     for(int i = 0; i < m; i++){
         cash_registers.add();
     }
+}
+
+void graphIntoDotFile(){ // Este metodo me ayuda a insertar todos los subgraphs de las EDD que voy a querer visualizar
+    SubgraphQueue* dot_queue = dot_file.getQueue();
+    dot_queue->add(carts_stk_1.getGraph());
+    dot_queue->add(carts_stk_2.getGraph());
 }
 
 
@@ -196,5 +251,6 @@ int initializerValue(string type){
         }
     } while(true);
 }
+
 
 
