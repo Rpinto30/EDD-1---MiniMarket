@@ -20,17 +20,23 @@ namespace structures{
     template <typename T>
     struct Node{
         int id = 0;
-        T data;
+        T* data;
         struct Node* next;
+
+        Node() : data(new T()) {}
+        //~Node() { delete data; }
     };
 
 
     template <typename T>
     struct BiNode{
         int id;
-        T data;
+        T* data;
         struct BiNode* next;
         struct BiNode* prev;
+
+         BiNode() : data(new T()) {}
+        //~BiNode() { delete data; }
     };
 
     //DECLARAR ESTRUCTURAS POR TYPEDEF
@@ -125,6 +131,8 @@ namespace structures{
             return 0;
         }
 
+        virtual void afterInsertAction(struct BiNode<T>* temp) {};
+
         int insert(struct BiNode<T>* new_node){
             if (checkList() == 1){
                 head = new_node;
@@ -140,6 +148,7 @@ namespace structures{
                 temp->next = new_node;
                 new_node->prev = temp;
                 new_node->next = nullptr;
+                afterInsertAction(temp);
                 return 0;
             }
             return 1;

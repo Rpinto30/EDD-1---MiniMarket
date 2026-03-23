@@ -1,49 +1,46 @@
 digraph MiniMarket {
+ rankdir=LR;
 subgraph cluster_Pila_1{
 label="Pila_1"
-Pila_1_0[label="0"];
-Pila_1_1[label="1"];
+style = "filled,rounded";
+color = lightgrey;
+Pila_1_0[label="0", shape=record, style=filled, fillcolor=white];
+Pila_1_1[label="1", shape=record, style=filled, fillcolor=white];
 Pila_1_0 -> Pila_1_1;
-Pila_1_2[label="2"];
-Pila_1_1 -> Pila_1_2;
-Pila_1_3[label="3"];
-Pila_1_2 -> Pila_1_3;
-Pila_1_4[label="4"];
-Pila_1_3 -> Pila_1_4;
-Pila_1_5[label="5"];
-Pila_1_4 -> Pila_1_5;
-Pila_1_6[label="6"];
-Pila_1_5 -> Pila_1_6;
-Pila_1_7[label="7"];
-Pila_1_6 -> Pila_1_7;
-Pila_1_8[label="8"];
-Pila_1_7 -> Pila_1_8;
-Pila_1_9[label="9"];
-Pila_1_8 -> Pila_1_9;
 
 }
 
 subgraph cluster_Pila_2{
 label="Pila_2"
-Pila_2_0[label="0"];
-Pila_2_1[label="1"];
+style = "filled,rounded";
+color = lightgrey;
+Pila_2_0[label="0", shape=record, style=filled, fillcolor=white];
+Pila_2_1[label="1", shape=record, style=filled, fillcolor=white];
 Pila_2_0 -> Pila_2_1;
-Pila_2_2[label="2"];
-Pila_2_1 -> Pila_2_2;
-Pila_2_3[label="3"];
-Pila_2_2 -> Pila_2_3;
-Pila_2_4[label="4"];
-Pila_2_3 -> Pila_2_4;
-Pila_2_5[label="5"];
-Pila_2_4 -> Pila_2_5;
-Pila_2_6[label="6"];
-Pila_2_5 -> Pila_2_6;
-Pila_2_7[label="7"];
-Pila_2_6 -> Pila_2_7;
-Pila_2_8[label="8"];
-Pila_2_7 -> Pila_2_8;
-Pila_2_9[label="9"];
-Pila_2_8 -> Pila_2_9;
+
+}
+
+subgraph cluster_Cola_Espera_Carritos{
+label="Cola_Espera_Carritos"
+style = "filled,rounded";
+color = lightgrey;
+Cola_Espera_Carritos_1[label="1", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_3[label="3", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_1 -> Cola_Espera_Carritos_3;
+
+}
+
+subgraph cluster_Cajas_Registradoras{
+label="Cajas_Registradoras"
+style = "filled,rounded";
+color = lightgrey;
+Cajas_Registradoras_0[label="0", shape=record, style=filled, fillcolor=white];
+Cajas_Registradoras_1[label="1", shape=record, style=filled, fillcolor=white];
+Cajas_Registradoras_0 -> Cajas_Registradoras_1;
+Cajas_Registradoras_1 -> Cajas_Registradoras_0;
+Cajas_Registradoras_2[label="2", shape=record, style=filled, fillcolor=white];
+Cajas_Registradoras_1 -> Cajas_Registradoras_2;
+Cajas_Registradoras_2 -> Cajas_Registradoras_1;
 
 }
 

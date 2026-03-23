@@ -24,11 +24,11 @@ namespace dotGenerator{
 
             void changeName(string new_name){
                 if (context == ""){
-                    context = "subgraph cluster_" + new_name +"{\nlabel=\""+ new_name +"\"\n";
+                    context = "subgraph cluster_" + new_name +"{\nlabel=\""+ new_name +"\"\nstyle = \"filled,rounded\";\ncolor = lightgrey;\n";
                 } else{
                     int pos = context.find("{");
                     string context_wth_name = context.substr(pos+1);
-                    context = "subgraph cluster_" + new_name +"{\nlabel=\""+ new_name +"\"\n" + context_wth_name;
+                    context = "subgraph cluster_" + new_name +"{\nlabel=\""+ new_name +"\"\nstyle = \"filled,rounded\";\ncolor = lightgrey;\n" + context_wth_name;
                 }
                 tittle = new_name;
 
@@ -38,7 +38,7 @@ namespace dotGenerator{
                 if (context == ""){
                     changeName("na");
                 }
-                context += tittle + "_" + name + "[label=\"" + name +"\"];\n";
+                context += tittle + "_" + name + "[label=\"" + name +"\", shape=record, style=filled, fillcolor=white];\n";
             }
 
             void insertNode(int name){
@@ -46,12 +46,13 @@ namespace dotGenerator{
                     changeName("na");
                 }
                 string name_ = to_string(name);
-                context +=  tittle + "_" + name_ + "[label=\"" + name_ +"\"];\n";
+                context +=  tittle + "_" + name_ + "[label=\""+ name_ +"\", shape=record, style=filled, fillcolor=white];\n";
             }
 
             void simpleConnectNode(string nodeA, string nodeB){
                 context += nodeA + " -> " + nodeB +";\n";
             }
+
     };
 
 
@@ -64,9 +65,14 @@ namespace dotGenerator{
         private:
         SubGraphNode* createNode(SubGraph* subgraph){
             SubGraphNode* new_node = new SubGraphNode;
-            new_node->data = *subgraph;
+            cout<<"a";
+            new_node->data = subgraph;
             new_node->next = nullptr;
             return new_node;
+        }
+
+        void printData(SubGraphNode* node) override{ //DEBUG METHOD
+           cout<<" - Nodo: "<< node->data->getTittle()<<endl;
         }
 
         public:
@@ -80,13 +86,17 @@ namespace dotGenerator{
             if (head != nullptr){
                 SubGraphNode* temp = head;
                 while(temp != nullptr){
-                    data += temp->data.getContext() + "\n}\n\n";
+                    string temp_context = temp->data->getContext();
+                    data += temp_context + "\n}\n\n";
                     temp = temp->next;
                 }
             }
             return data;
         }
 
+        void print(){
+            showList();
+        }
     };
 
     class DotFile{
@@ -104,19 +114,25 @@ namespace dotGenerator{
                 outFile.close();
             }
 
+            int generateFile(){
+                constructFile("graph.dot");
+                int result = system("dot -Tpng graph.dot -o output.png");
+                return result;
+            }
+
         public:
 
             SubgraphQueue* getQueue() {return &queue_subgraph;}
 
             void updateSubGraphs(){
-                context = "digraph MiniMarket {\n" + queue_subgraph.getContexts() +"\n}";
+                context = "digraph MiniMarket {\n rankdir=LR;\n" + queue_subgraph.getContexts() +"\n}";
 
             }
 
-            int generateFile(){
-                constructFile("graph.dot");
-                int result = system("dot -Tpng graph.dot -o output.png");
-                return result;
+            int generateNewFiles(){
+                //queue_subgraph.print();
+                updateSubGraphs();
+                return generateFile();
             }
 
     };
