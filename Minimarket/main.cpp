@@ -45,9 +45,10 @@ public:
      ClientNode* createNode(){
         ClientNode * new_node = new ClientNode;
         new_node->data->idClient = globalID++;
+
+        string nameNode = tittle + "_" + to_string(new_node->data->idClient);
+        graph.insertNode(nameNode, nameNode);
         new_node->next = nullptr;
-        string nameNode = to_string(new_node->data->idClient);
-        graph.insertNode(nameNode);
         return new_node;
     }
 
@@ -97,17 +98,20 @@ private:
     CartNode* createNode(){
         CartNode * new_node = new CartNode;
         new_node->data->idCart = globalID++;
+
+        string nameNode = tittle + "_"+to_string(new_node->data->idCart);
+        new_node->data->nameNode = nameNode;
+        graph.insertNode(nameNode, nameNode);
+
         new_node->next = nullptr;
 
-        string nameNode = to_string(new_node->data->idCart);
-        graph.insertNode(nameNode);
         return new_node;
     }
 
     void afterInsertAction(CartNode* temp) override{ //el nombre siempre es tittle_id
         if(temp->next != nullptr){
-            string nodeA = tittle +"_"+ to_string(temp->data->idCart);
-            string nodeB = tittle +"_"+ to_string(temp->next->data->idCart);
+            string nodeA = temp->data->nameNode;
+            string nodeB = temp->next->data->nameNode;;
             graph.simpleConnectNode(nodeA, nodeB);
         }
     }
@@ -125,9 +129,30 @@ public:
         insert(new_node);
     }
 
+    void add(CartNode* cart){
+        if(cart != nullptr)
+       {
+            if (cart->next != nullptr)cart->next = nullptr;
+
+            insert(cart);
+            string nameNode = cart->data->nameNode;
+            graph.insertNode(nameNode , nameNode);
+       }
+    }
+
+
+    CartNode* popCart(){
+        CartNode * last = pop();
+        if (last != nullptr) {
+            cout<<"borrando"<<last->data->nameNode<<endl;
+            graph.removeNode(last->data->nameNode);
+        }
+        return last;
+    }
+
 };
 
-// Doble enlazada
+// DOBLE ENLAZADA CAJAS REGISTRADORAS
 class ListCashRegister : private DoubleLinkedList<CashRegister>{
 private:
     int globalID = 0;
@@ -140,8 +165,9 @@ private:
         new_node->next = nullptr;
         new_node->prev = nullptr;
 
-        string nameNode = to_string(new_node->data->idCashRegister);
-        graph.insertNode(nameNode);
+        string nameNode = tittle + "_" +to_string(new_node->data->idCashRegister);
+        string state = (new_node->data->state == 0) ? "Disponible" : "Ocupado por:\n" + to_string(new_node->data->idClient);
+        graph.insertNode(nameNode, "{"+nameNode+"|"+ state+"}");
         return new_node;
     }
 
@@ -170,6 +196,8 @@ public:
 
 
 int initializerValue(string type);
+void generateDot();
+
 void createClients();
 void createCarts();
 void createCashRegisters();
@@ -192,15 +220,29 @@ int main()
 
     createCarts();
     createCashRegisters();
+    generateDot();
     createClients();
 
-    int t = dot_file.generateNewFiles();
-    if (t == 0){
-        cout<<" $ .dot generador con exito"<<endl;
-    } else{
-        cout<<" x Error al crear el .dot"<<endl;
-    }
+    CartNode* adios;
+    do{
+        adios= carts_stk_1.popCart();
+        if (adios == nullptr) break;
+        cout<<adios->data->idCart;
+        carts_stk_2.add(adios);
+        generateDot();
 
+    } while(adios != nullptr);
+
+    //Si lo vuelvo a colar en su stack,
+    adios = carts_stk_2.popCart();
+    cout<<adios->data->idCart;
+    carts_stk_1.add(adios);
+    generateDot();
+
+    adios = carts_stk_2.popCart();
+    cout<<adios->data->idCart;
+    carts_stk_1.add(adios);
+    generateDot();
 
     return 0;
     //Window win;
@@ -246,6 +288,16 @@ void graphIntoDotFile(){ // Este metodo me ayuda a insertar todos los subgraphs 
 
 
 /*UTILS (FUNCIONES QUE ME SIRVEN EN LA SIMULACION EN GENERAL, MAS QUE TODO ABSTRACCIONES)*/
+void generateDot(){
+    int t = dot_file.generateNewFiles();
+    if (t == 0){
+        cout<<" $ .dot generador con exito"<<endl;
+    } else{
+        cout<<" x Error al crear el .dot"<<endl;
+    }
+
+}
+
 int initializerValue(string type){
     int val;
     do{

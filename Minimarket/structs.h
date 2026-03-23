@@ -1,13 +1,16 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
+#include <iostream>
 namespace structures{
     typedef struct Cart{
         int idCart = 0;
+        std::string nameNode = "";
     } Cart;
 
     typedef struct CashRegister{
         int idCashRegister = 0;
+        std::string nameNode = "";
         float timeService = 0.0;
         int state = 0;
         int idClient;
@@ -257,13 +260,19 @@ namespace structures{
             return temp;
         }
 
-        void pop(){
+        struct Node<T>* pop(){
             //eliminar el ultimo
-            if (head == nullptr) return;
+            if (head == nullptr) {
+                std::cout<<"Ya nada"<<std::endl;
+                return nullptr;
+
+            }
 
             if (head->next == nullptr){
-                delete head;
+                struct Node<T>* temp = head;
                 head = nullptr;
+                std::cout<<"Es el ultimo"<<std::endl;
+                return temp;
             }
             else{
                 struct Node<T>* temp = head;
@@ -272,9 +281,9 @@ namespace structures{
                     prev = temp;
                     temp = temp->next;
                 }
-
                 prev->next = nullptr;
-                delete temp;
+                temp->next = nullptr;
+                return temp;
             }
         }
 

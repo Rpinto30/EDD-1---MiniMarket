@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1774231231 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\main.cpp
+1774254809 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\main.cpp
 	<iostream>
 	<windows.h>
 	<thread>
@@ -12,7 +12,8 @@
 
 1774067406 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\headers\structs.h
 
-1774231230 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\structs.h
+1774254558 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\structs.h
+	<iostream>
 
 1774075414 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\visualmodule.cpp
 	<windows.h>
@@ -20,7 +21,7 @@
 1774211852 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\gui.h
 	<windows.h>
 
-1774230491 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\dotgenerator.h
+1774252500 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\dotgenerator.h
 	<iostream>
 	<fstream>
 	<string>

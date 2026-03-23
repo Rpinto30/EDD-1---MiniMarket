@@ -38,19 +38,39 @@ namespace dotGenerator{
                 if (context == ""){
                     changeName("na");
                 }
-                context += tittle + "_" + name + "[label=\"" + name +"\", shape=record, style=filled, fillcolor=white];\n";
+                context += name + "[label=\"" + name +"\", shape=record, style=filled, fillcolor=white];\n";
             }
 
-            void insertNode(int name){
+            void insertNode(string name, string label){
                 if (context == ""){
                     changeName("na");
                 }
-                string name_ = to_string(name);
-                context +=  tittle + "_" + name_ + "[label=\""+ name_ +"\", shape=record, style=filled, fillcolor=white];\n";
+                context +=  name + "[label=\"" + label +"\", shape=record, style=filled, fillcolor=white];\n";
             }
 
             void simpleConnectNode(string nodeA, string nodeB){
                 context += nodeA + " -> " + nodeB +";\n";
+            }
+
+
+            void removeNode(string node_delete, string node_prev = "", string node_next = ""){
+                stringstream separator(context); //Clase std::stringstream que me va a servir para separar el context en lineas sin hacer un bucle anidado y evitar un O(n2)
+                string temp;
+                string new_context;
+
+                while (getline(separator, temp, '\n')){
+                    if (temp.find(node_delete) != string::npos) {continue;}
+                    else {new_context+=temp+"\n";}
+                }
+                context = new_context;
+                if (node_prev != "" && node_next != "") simpleConnectNode(node_prev, node_next);
+            }
+
+
+            void removeBiNode(){
+                //removerNodos
+                //unir nodo anterior con el nodo siguietnte
+                //unir nodo siguiente con el nodo anterior
             }
 
     };
@@ -125,7 +145,8 @@ namespace dotGenerator{
             SubgraphQueue* getQueue() {return &queue_subgraph;}
 
             void updateSubGraphs(){
-                context = "digraph MiniMarket {\n rankdir=LR;\n" + queue_subgraph.getContexts() +"\n}";
+                // rankdir=LR;
+                context = "digraph MiniMarket {\n\n" + queue_subgraph.getContexts() +"\n}";
 
             }
 
