@@ -32,6 +32,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="definitions.h" />
 		<Unit filename="dotGenerator.h" />
 		<Unit filename="gui.h" />
 		<Unit filename="main.cpp" />

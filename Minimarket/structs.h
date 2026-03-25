@@ -5,25 +5,27 @@
 namespace structures{
     typedef struct Cart{
         int idCart = 0;
-        std::string nameNode = "";
+        int idGroup = 0;
     } Cart;
-
-    typedef struct CashRegister{
-        int idCashRegister = 0;
-        std::string nameNode = "";
-        float timeService = 0.0;
-        int state = 0;
-        int idClient;
-    } CashRegister;
 
     typedef struct Client{
         int idClient = 0;
+        Cart * cart;
     } Client;
+
+    typedef struct CashRegister{
+        int idCashRegister = 0;
+        int timeService = 0.0;
+        int state = 0;
+        Client* client;
+    } CashRegister;
+
 
     template <typename T>
     struct Node{
         int id = 0;
         T* data;
+        std::string nameNode = "";
         struct Node* next;
 
         Node() : data(new T()) {}
@@ -35,6 +37,7 @@ namespace structures{
     struct BiNode{
         int id;
         T* data;
+        std::string nameNode = "";
         struct BiNode* next;
         struct BiNode* prev;
 
@@ -45,7 +48,7 @@ namespace structures{
     //DECLARAR ESTRUCTURAS POR TYPEDEF
     typedef Node<Cart> CartNode;
     typedef Node<Client> ClientNode;
-    typedef Node<Client> ClientBuying;
+    typedef BiNode<Client> ClientBiNode;
     typedef BiNode<CashRegister> CashRegisterNode;
 
     template <typename T>
@@ -212,12 +215,13 @@ namespace structures{
             return 0;
         }
 
+        virtual void afterInsertAction(struct BiNode<T>* temp) {};
+
         int insert(struct BiNode<T>* new_node){
             if (checkList() == 1){
                 head = new_node;
                 head->next = new_node;
                 head->prev = new_node;
-                return 0;
             }
             else{
                 struct BiNode<T> * last = head->prev;
@@ -227,9 +231,55 @@ namespace structures{
 
                 new_node->next = head;
                 new_node->prev = last;
-                return 0;
             }
-            return 1;
+            afterInsertAction(new_node);
+            return 0;
+        }
+
+        struct BiNode<T>* getActual(){
+            return head;
+        }
+
+        void modeForward(){
+            head = head->next;
+        }
+
+        //hacer la conversion de Node a BiNode
+        struct BiNode<T>* removeActual(){
+                if (checkList() == 1) return nullptr;
+
+                struct BiNode<T>* temp = head;
+
+                if (head->next == head) {
+                    head = nullptr;
+                } else {
+                    struct BiNode<T>* last = head->prev;
+                    head = temp->next;
+                    last->next = head;
+                    head->prev = last;
+                }
+
+                temp->next = nullptr;
+                temp->prev = nullptr;
+                return temp;
+        }
+
+
+        void desligateNode(struct BiNode<T> * node){ //Este metodo unicamente desliga el nodo de la lista circualr
+            struct BiNode<T> *front_ = node->next;
+            struct BiNode<T> *back_ = node->prev;
+            if (back_ != NULL) {back_->next = front_;}
+            if (front_ != NULL) {front_->prev = back_;}
+            if (node == head) {
+                if (node->next != NULL){
+                    head = node->next;
+                }else{
+                    head = NULL;
+                }
+            }
+            node->next = nullptr;
+            node->prev = nullptr;
+
         }
 
         ~DoubleCircleList(){
@@ -240,7 +290,7 @@ namespace structures{
                 struct BiNode<T>* deleter = temp;
                 temp = temp->next;
                 delete deleter;
-            } while(temp == head);
+            } while(temp != head);
         }
     };
 

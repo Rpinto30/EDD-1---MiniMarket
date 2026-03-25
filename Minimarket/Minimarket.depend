@@ -1,18 +1,21 @@
 # depslib dependency file v1.0
-1774254809 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\main.cpp
+1774429072 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\main.cpp
 	<iostream>
 	<windows.h>
 	<thread>
 	<string>
+	<cstdlib>
+	<ctime>
 	"gui.h"
 	"structs.h"
 	"dotGenerator.h"
+	"definitions.h"
 
 1773722696 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\structs\structs.cpp
 
 1774067406 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\headers\structs.h
 
-1774254558 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\structs.h
+1774426724 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\structs.h
 	<iostream>
 
 1774075414 source:c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\visualmodule.cpp
@@ -21,10 +24,14 @@
 1774211852 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\gui.h
 	<windows.h>
 
-1774252500 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\dotgenerator.h
+1774424359 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\dotgenerator.h
 	<iostream>
 	<fstream>
 	<string>
 	<filesystem>
 	"structs.h"
+
+1774428510 c:\users\rodri\onedrive\desktop\practicas c c++\c++\proyecto i - estructuras i\minimarketmanager\minimarket\definitions.h
+	<iostream>
+	"dotGenerator.h"
 

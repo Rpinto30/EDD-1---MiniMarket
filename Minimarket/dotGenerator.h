@@ -59,11 +59,45 @@ namespace dotGenerator{
                 string new_context;
 
                 while (getline(separator, temp, '\n')){
-                    if (temp.find(node_delete) != string::npos) {continue;}
-                    else {new_context+=temp+"\n";}
+                    size_t position = temp.find(node_delete);
+                    if (position != string::npos) {
+                        char next = temp[position + node_delete.size()];
+                        if (next == '[' || next == ' ' || next == ';'){ continue;}
+                    }
+                    new_context+=temp+"\n";
                 }
                 context = new_context;
                 if (node_prev != "" && node_next != "") simpleConnectNode(node_prev, node_next);
+            }
+
+            void updateLabelNode(string nameNode, string label){
+                stringstream separator(context);
+                string temp;
+                string new_context;
+
+                while (getline(separator, temp, '\n')){
+                    size_t pos = temp.find(nameNode+'[');
+                    if (pos != string::npos){
+                        new_context+= nameNode + "[label=\"" + label +"\", shape=record, style=filled, fillcolor=white];\n";
+                        continue;
+                    }
+                    new_context+=temp+"\n";
+                }
+                context = new_context;
+
+            }
+
+
+            void removeAllConections(){
+                stringstream separator(context);
+                string temp;
+                string new_context;
+
+                while (getline(separator, temp, '\n')){
+                    if (temp.find("->") != string::npos) {continue;}
+                    else {new_context+=temp+"\n";}
+                }
+                context = new_context;
             }
 
 
@@ -85,7 +119,6 @@ namespace dotGenerator{
         private:
         SubGraphNode* createNode(SubGraph* subgraph){
             SubGraphNode* new_node = new SubGraphNode;
-            cout<<"a";
             new_node->data = subgraph;
             new_node->next = nullptr;
             return new_node;

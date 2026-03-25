@@ -2,200 +2,24 @@
 #include <windows.h>
 #include <thread>
 #include <string>
+#include <cstdlib>
+#include <ctime> //para los numeros aleatorios
 
 #include "gui.h"
 #include "structs.h"
 #include "dotGenerator.h"
+#include "definitions.h"
 
-/*VARIABLES EN EL SCOPE GLOBAL*/
-//DotFile dot;
-
-
+/*NAMESPACES*/
 using namespace std;
 using namespace structures;
 using namespace window;
 using namespace dotGenerator;
+using namespace data_structures;
 
-// COLA ESPERAR CARRITO (0)
-class WaitClientCart : private Queue<Client>{
-private:
-    int globalID = 1;
-    string tittle;
-    SubGraph graph;
-     void printData(ClientNode* node) override{
-       cout<<" - Cliente: "<< node->data->idClient << " en espera de un carrito..."<<endl;
-    }
-
-    void afterInsertAction(ClientNode* temp) override{ //el nombre siempre es tittle_id
-        if(temp->next != nullptr){
-            string nodeA = tittle +"_"+ to_string(temp->data->idClient);
-            string nodeB = tittle +"_"+ to_string(temp->next->data->idClient);
-            graph.simpleConnectNode(nodeA, nodeB);
-        }
-    }
-
-public:
-    WaitClientCart(string tittle){
-        graph.changeName(tittle);
-        this->tittle = tittle;
-    }
-
-    SubGraph * getGraph() { return &graph;}
-
-     ClientNode* createNode(){
-        ClientNode * new_node = new ClientNode;
-        new_node->data->idClient = globalID++;
-
-        string nameNode = tittle + "_" + to_string(new_node->data->idClient);
-        graph.insertNode(nameNode, nameNode);
-        new_node->next = nullptr;
-        return new_node;
-    }
-
-    void queueClient(){
-        ClientNode* new_node = createNode();
-        insert(new_node);
-    }
-
-    void print(){
-        showList();
-    }
-};
-
-// COLA ESPERAR CAJA
-class WaitClientCashRegister : private Queue<Client>{
-private:
-    int globalID = 1;
-     void printData(ClientNode* node) override{
-       cout<<" - Cliente: "<< node->data->idClient << " en espera de un carrito..."<<endl;
-    }
-
-public:
-     ClientNode* createNode(){
-        ClientNode * new_node = new ClientNode;
-        new_node->id = globalID++;
-        new_node->next = nullptr;
-        return new_node;
-    }
-
-    void queueClient(){
-        ClientNode* new_node = createNode();
-        insert(new_node);
-    }
-
-    void print(){
-        showList();
-    }
-
-};
-
-// Stack
-class StackCart : private Stack<Cart>{
-private:
-    string tittle;
-    SubGraph graph;
-    int globalID = 0;
-    CartNode* createNode(){
-        CartNode * new_node = new CartNode;
-        new_node->data->idCart = globalID++;
-
-        string nameNode = tittle + "_"+to_string(new_node->data->idCart);
-        new_node->data->nameNode = nameNode;
-        graph.insertNode(nameNode, nameNode);
-
-        new_node->next = nullptr;
-
-        return new_node;
-    }
-
-    void afterInsertAction(CartNode* temp) override{ //el nombre siempre es tittle_id
-        if(temp->next != nullptr){
-            string nodeA = temp->data->nameNode;
-            string nodeB = temp->next->data->nameNode;;
-            graph.simpleConnectNode(nodeA, nodeB);
-        }
-    }
-
-public:
-    StackCart(string tittle){
-        graph.changeName(tittle);
-        this->tittle = tittle;
-    }
-
-    SubGraph * getGraph() { return &graph;}
-
-    void add(){
-        CartNode* new_node = createNode();
-        insert(new_node);
-    }
-
-    void add(CartNode* cart){
-        if(cart != nullptr)
-       {
-            if (cart->next != nullptr)cart->next = nullptr;
-
-            insert(cart);
-            string nameNode = cart->data->nameNode;
-            graph.insertNode(nameNode , nameNode);
-       }
-    }
-
-
-    CartNode* popCart(){
-        CartNode * last = pop();
-        if (last != nullptr) {
-            cout<<"borrando"<<last->data->nameNode<<endl;
-            graph.removeNode(last->data->nameNode);
-        }
-        return last;
-    }
-
-};
-
-// DOBLE ENLAZADA CAJAS REGISTRADORAS
-class ListCashRegister : private DoubleLinkedList<CashRegister>{
-private:
-    int globalID = 0;
-    SubGraph graph;
-    string tittle;
-
-    CashRegisterNode* createNode(){
-        CashRegisterNode * new_node = new CashRegisterNode;
-        new_node->data->idCashRegister = globalID++;
-        new_node->next = nullptr;
-        new_node->prev = nullptr;
-
-        string nameNode = tittle + "_" +to_string(new_node->data->idCashRegister);
-        string state = (new_node->data->state == 0) ? "Disponible" : "Ocupado por:\n" + to_string(new_node->data->idClient);
-        graph.insertNode(nameNode, "{"+nameNode+"|"+ state+"}");
-        return new_node;
-    }
-
-    void afterInsertAction(CashRegisterNode* temp) override{ //el nombre siempre es tittle_id
-        if(temp->next != nullptr){
-            string nodeA = tittle +"_"+ to_string(temp->data->idCashRegister);
-            string nodeB = tittle +"_"+ to_string(temp->next->data->idCashRegister);
-            graph.simpleConnectNode(nodeA, nodeB);
-            graph.simpleConnectNode(nodeB, nodeA);
-        }
-    }
-public:
-     SubGraph * getGraph() { return &graph;}
-
-    ListCashRegister(string tittle){
-        graph.changeName(tittle);
-        this->tittle = tittle;
-    }
-
-    void add(){
-        CashRegisterNode* new_node = createNode();
-        insert(new_node);
-    }
-};
-
-
-
+/*INICIALIZAR LAS FUCNIONES DE ABAJO*/
 int initializerValue(string type);
+int randomBetween(int min_value, int max_value);
 void generateDot();
 
 void createClients();
@@ -203,15 +27,26 @@ void createCarts();
 void createCashRegisters();
 void graphIntoDotFile();
 
+//PARA LA SIMULACION
+ClientNode* getCart();
+void insertBuyClient(ClientNode* client);
+void moveClientToPay();
+void removeClientCashRegister();
+
+/*VARIABLES EN EL SCOPE GLOBAL*/
 //ESTRUCTURAS DIRECTAS DEL PROYECTO
 ListCashRegister cash_registers("Cajas_Registradoras");
+DCLBuying buying_clients("Clientes_Comprando");
 
+int StackCart::globalIDCounter = 0; //variable static
 StackCart carts_stk_1("Pila_1");
 StackCart carts_stk_2("Pila_2");
-WaitClientCart wait_client_cart("Cola_Espera_Carritos");
+WaitClient wait_client_cart("Cola_Espera_Carritos");
+WaitClient wait_client_cashRegister("Cola_Espera_Cajas_Registradoras");
+//la otra cola de espera es solo otra copia
 
-//ESTRUCTURAS ADICIONALES, PERO IGUAL USAN MIS EDD
 DotFile dot_file;
+
 
 /*------------------------------------------------MAIN--------------------------------------------------*/
 int main()
@@ -220,29 +55,37 @@ int main()
 
     createCarts();
     createCashRegisters();
-    generateDot();
     createClients();
+    generateDot();
+    int af = 0;
 
-    CartNode* adios;
-    do{
-        adios= carts_stk_1.popCart();
-        if (adios == nullptr) break;
-        cout<<adios->data->idCart;
-        carts_stk_2.add(adios);
+    while(af < 20){
+        int ran = randomBetween(0,1);
+        if (ran == 1) wait_client_cart.queueClient();
+
+        cout<<"  - SIGUIENTE PASO "<<endl;
+        ClientNode* cl = getCart();
+
+        if (cl != nullptr){
+            cout<<"Cliente: "<<cl->data->idClient<<", toma carrito: "<<to_string(cl->data->cart->idGroup)+":"+to_string(cl->data->cart->idCart)<<endl;
+            insertBuyClient(cl);
+        }
+
+        int ran_1 = randomBetween(1,10);
+        if (buying_clients.findID(ran_1) == 0)
+        {
+            ClientNode* c = buying_clients.popClientNode(ran_1);
+            cout<<"salio de comprar"<<c->nameNode<<endl;
+            wait_client_cashRegister.add(c);
+        }
+        moveClientToPay();
+        removeClientCashRegister();
+        Sleep(1500);
         generateDot();
+        af++;
+    }
 
-    } while(adios != nullptr);
 
-    //Si lo vuelvo a colar en su stack,
-    adios = carts_stk_2.popCart();
-    cout<<adios->data->idCart;
-    carts_stk_1.add(adios);
-    generateDot();
-
-    adios = carts_stk_2.popCart();
-    cout<<adios->data->idCart;
-    carts_stk_1.add(adios);
-    generateDot();
 
     return 0;
     //Window win;
@@ -279,13 +122,120 @@ void createClients(){
 
 void graphIntoDotFile(){ // Este metodo me ayuda a insertar todos los subgraphs de las EDD que voy a querer visualizar
     SubgraphQueue* dot_queue = dot_file.getQueue();
+    dot_queue->add(wait_client_cart.getGraph());
     dot_queue->add(carts_stk_1.getGraph());
     dot_queue->add(carts_stk_2.getGraph());
-    dot_queue->add(wait_client_cart.getGraph());
+    dot_queue->add(buying_clients.getGraph());
     dot_queue->add(cash_registers.getGraph());
+    dot_queue->add(wait_client_cashRegister.getGraph());
+
 
 }
 
+StackCart* selectCart(){
+    if(carts_stk_1.peekCart() == nullptr && carts_stk_2.peekCart() == nullptr){
+        cout<<"Sin carritos disponibles!!"<<endl;
+        return nullptr;
+    }
+
+    if (carts_stk_1.peekCart() == nullptr){
+        return &carts_stk_2;
+    }else if (carts_stk_2.peekCart() == nullptr){
+        return &carts_stk_1;
+    }else{
+        int rand_cart = randomBetween(0,1);
+        switch(rand_cart){
+            case 0: return &carts_stk_1; break;
+            case 1: return &carts_stk_2; break;
+            default: return nullptr; break;
+        }
+    }
+
+
+}
+
+ClientNode* getCart(){ // Para sacar un cliente de la pila de espera
+    StackCart* stack_use = selectCart();
+
+    if (stack_use != nullptr) {
+        ClientNode* client = wait_client_cart.dequeueClient();
+        CartNode* cart = stack_use->popCart();
+        client->data->cart = cart->data;
+        delete cart;
+        return client;
+    } else{
+        return nullptr;
+    }
+}
+
+void insertBuyClient(ClientNode* client){
+    buying_clients.add(client);
+}
+
+void updateTextCashRegister(CashRegisterNode* node, Client* client){
+    if (client != nullptr){
+         string state = "Ocupado por el cliente: " + to_string(client->idClient);
+        string cart = "Usando el carrito: " + to_string(client->cart->idGroup) + ":" + to_string(client->cart->idCart);
+        string time = "Tiempo de servicio: " + to_string(node->data->timeService) + "s";
+        cash_registers.getGraph()->updateLabelNode(node->nameNode, "{Caja_"+ to_string(node->data->idCashRegister) +"|"+ state+"|"+ cart+ "|"+ time+"}");
+    }else{
+        cash_registers.getGraph()->updateLabelNode(node->nameNode, "{Caja_"+ to_string(node->data->idCashRegister) +"| Disponible}");
+    }
+
+}
+
+//PAGO DE CLIENTES
+void moveClientToPay(){
+    ClientNode* client = wait_client_cashRegister.peekClient();
+    if(client != nullptr){
+        CashRegisterNode* empty_cash_register = cash_registers.emptyCashRegister();
+        if(empty_cash_register != nullptr){
+            client = wait_client_cashRegister.dequeueClient();
+            empty_cash_register->data->state = 1;
+            empty_cash_register->data->client = client->data;
+            updateTextCashRegister(empty_cash_register, client->data);
+            delete client;
+            cout<<endl<<"Cliente: "+ to_string(empty_cash_register->data->client->idClient)+ " está siendo atendido en la caja: "<< to_string(empty_cash_register->data->idCashRegister)<<endl;
+        }
+    }
+}
+
+//REGRESAR CARRETA Y SALIR DEL SISTEMA
+
+void removeClientCashRegister(){
+    cash_registers.clockServiceTime(updateTextCashRegister);
+    int random_time =  randomBetween(3,7);
+    CashRegisterNode* full_cash_register = cash_registers.endService(random_time);
+
+    if(full_cash_register != nullptr){
+        Client* client = full_cash_register->data->client;
+        Cart* cart = client->cart;
+
+        full_cash_register->data->state = 0;
+        full_cash_register->data->client = nullptr;
+        full_cash_register->data->timeService = 0;
+        updateTextCashRegister(full_cash_register, nullptr);
+        int rand = randomBetween(0,1);
+
+        CartNode* new_node = new CartNode; //Ya es muy tarde para cambiar la TDA x'd
+        new_node->data = cart;
+        new_node->next = nullptr;
+
+
+        if (rand == 1) {
+            new_node->nameNode = carts_stk_1.getTittle() + "_" +to_string(cart->idGroup) + "_"+to_string(cart->idCart);
+            carts_stk_1.add(new_node);
+        }
+        else {
+            new_node->nameNode = carts_stk_2.getTittle() + "_" +to_string(cart->idGroup) + "_"+to_string(cart->idCart);
+            carts_stk_2.add(new_node);
+        }
+
+        cout<<"El cliente: "<< to_string(client->idClient) <<" ha salido del minimarket"<<endl;
+        cout<<"La carreta: "<< to_string(cart->idCart) << "ha sido devuleta a la pila: "<<0<<endl;
+        delete client;
+    }
+}
 
 /*UTILS (FUNCIONES QUE ME SIRVEN EN LA SIMULACION EN GENERAL, MAS QUE TODO ABSTRACCIONES)*/
 void generateDot(){
@@ -296,6 +246,12 @@ void generateDot(){
         cout<<" x Error al crear el .dot"<<endl;
     }
 
+}
+
+int randomBetween(int min_value, int max_value){
+    srand(time(0));
+    int random = min_value + (rand() % (max_value+1));
+    return random;
 }
 
 int initializerValue(string type){

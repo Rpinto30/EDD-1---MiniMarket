@@ -1,12 +1,35 @@
 digraph MiniMarket {
 
+subgraph cluster_Cola_Espera_Carritos{
+label="Cola_Espera_Carritos"
+style = "filled,rounded";
+color = lightgrey;
+Cola_Espera_Carritos_8[label="Cliente_8", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_9[label="Cliente_9", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_8 -> Cola_Espera_Carritos_9;
+Cola_Espera_Carritos_10[label="Cliente_10", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_9 -> Cola_Espera_Carritos_10;
+Cola_Espera_Carritos_11[label="Cliente_11", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_10 -> Cola_Espera_Carritos_11;
+Cola_Espera_Carritos_12[label="Cliente_12", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_11 -> Cola_Espera_Carritos_12;
+Cola_Espera_Carritos_13[label="Cliente_13", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_12 -> Cola_Espera_Carritos_13;
+Cola_Espera_Carritos_14[label="Cliente_14", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_13 -> Cola_Espera_Carritos_14;
+Cola_Espera_Carritos_15[label="Cliente_15", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_14 -> Cola_Espera_Carritos_15;
+Cola_Espera_Carritos_16[label="Cliente_16", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_15 -> Cola_Espera_Carritos_16;
+Cola_Espera_Carritos_17[label="Cliente_17", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_16 -> Cola_Espera_Carritos_17;
+
+}
+
 subgraph cluster_Pila_1{
 label="Pila_1"
 style = "filled,rounded";
 color = lightgrey;
-Pila_1_0[label="Pila_1_0", shape=record, style=filled, fillcolor=white];
-Pila_1_0 -> Pila_1_1;
-Pila_1_1[label="Pila_1_1", shape=record, style=filled, fillcolor=white];
 
 }
 
@@ -14,29 +37,22 @@ subgraph cluster_Pila_2{
 label="Pila_2"
 style = "filled,rounded";
 color = lightgrey;
-Pila_2_0[label="Pila_2_0", shape=record, style=filled, fillcolor=white];
-Pila_2_1[label="Pila_2_1", shape=record, style=filled, fillcolor=white];
-Pila_2_0 -> Pila_2_1;
-Pila_2_2[label="Pila_2_2", shape=record, style=filled, fillcolor=white];
-Pila_2_1 -> Pila_2_2;
-Pila_2_3[label="Pila_2_3", shape=record, style=filled, fillcolor=white];
-Pila_2_2 -> Pila_2_3;
-Pila_2_4[label="Pila_2_4", shape=record, style=filled, fillcolor=white];
-Pila_2_3 -> Pila_2_4;
-Pila_2_4 -> Pila_1_4;
-Pila_1_4[label="Pila_1_4", shape=record, style=filled, fillcolor=white];
-Pila_1_4 -> Pila_1_3;
-Pila_1_3[label="Pila_1_3", shape=record, style=filled, fillcolor=white];
-Pila_1_3 -> Pila_1_2;
-Pila_1_2[label="Pila_1_2", shape=record, style=filled, fillcolor=white];
 
 }
 
-subgraph cluster_Cola_Espera_Carritos{
-label="Cola_Espera_Carritos"
+subgraph cluster_Clientes_Comprando{
+label="Clientes_Comprando"
 style = "filled,rounded";
 color = lightgrey;
-Cola_Espera_Carritos_1[label="Cola_Espera_Carritos_1", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_5[label="{Cliente_5| Carrito_1:0}", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_6[label="{Cliente_6| Carrito_2:1}", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_7[label="{Cliente_7| Carrito_2:0}", shape=record, style=filled, fillcolor=white];
+Cola_Espera_Carritos_7 -> Cola_Espera_Carritos_5;
+Cola_Espera_Carritos_7 -> Cola_Espera_Carritos_6;
+Cola_Espera_Carritos_5 -> Cola_Espera_Carritos_6;
+Cola_Espera_Carritos_5 -> Cola_Espera_Carritos_7;
+Cola_Espera_Carritos_6 -> Cola_Espera_Carritos_7;
+Cola_Espera_Carritos_6 -> Cola_Espera_Carritos_5;
 
 }
 
@@ -44,10 +60,26 @@ subgraph cluster_Cajas_Registradoras{
 label="Cajas_Registradoras"
 style = "filled,rounded";
 color = lightgrey;
-Cajas_Registradoras_0[label="{Cajas_Registradoras_0|Disponible}", shape=record, style=filled, fillcolor=white];
-Cajas_Registradoras_1[label="{Cajas_Registradoras_1|Disponible}", shape=record, style=filled, fillcolor=white];
+Cajas_Registradoras_0[label="{Caja_0|Ocupado por el cliente: 3|Usando el carrito: 1:1|Tiempo de servicio: 3s}", shape=record, style=filled, fillcolor=white];
+Cajas_Registradoras_1[label="{Caja_1| Disponible}", shape=record, style=filled, fillcolor=white];
 Cajas_Registradoras_0 -> Cajas_Registradoras_1;
 Cajas_Registradoras_1 -> Cajas_Registradoras_0;
+Cajas_Registradoras_2[label="{Caja_2|Disponible}", shape=record, style=filled, fillcolor=white];
+Cajas_Registradoras_1 -> Cajas_Registradoras_2;
+Cajas_Registradoras_2 -> Cajas_Registradoras_1;
+Cajas_Registradoras_3[label="{Caja_3|Disponible}", shape=record, style=filled, fillcolor=white];
+Cajas_Registradoras_2 -> Cajas_Registradoras_3;
+Cajas_Registradoras_3 -> Cajas_Registradoras_2;
+Cajas_Registradoras_4[label="{Caja_4|Disponible}", shape=record, style=filled, fillcolor=white];
+Cajas_Registradoras_3 -> Cajas_Registradoras_4;
+Cajas_Registradoras_4 -> Cajas_Registradoras_3;
+
+}
+
+subgraph cluster_Cola_Espera_Cajas_Registradoras{
+label="Cola_Espera_Cajas_Registradoras"
+style = "filled,rounded";
+color = lightgrey;
 
 }
 
