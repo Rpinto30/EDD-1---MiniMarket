@@ -4,25 +4,6 @@ subgraph cluster_Cola_Espera_Carritos{
 label="Cola_Espera_Carritos"
 style = "filled,rounded";
 color = lightgrey;
-Cola_Espera_Carritos_8[label="Cliente_8", shape=record, style=filled, fillcolor=white];
-Cola_Espera_Carritos_9[label="Cliente_9", shape=record, style=filled, fillcolor=white];
-Cola_Espera_Carritos_8 -> Cola_Espera_Carritos_9;
-Cola_Espera_Carritos_10[label="Cliente_10", shape=record, style=filled, fillcolor=white];
-Cola_Espera_Carritos_9 -> Cola_Espera_Carritos_10;
-Cola_Espera_Carritos_11[label="Cliente_11", shape=record, style=filled, fillcolor=white];
-Cola_Espera_Carritos_10 -> Cola_Espera_Carritos_11;
-Cola_Espera_Carritos_12[label="Cliente_12", shape=record, style=filled, fillcolor=white];
-Cola_Espera_Carritos_11 -> Cola_Espera_Carritos_12;
-Cola_Espera_Carritos_13[label="Cliente_13", shape=record, style=filled, fillcolor=white];
-Cola_Espera_Carritos_12 -> Cola_Espera_Carritos_13;
-Cola_Espera_Carritos_14[label="Cliente_14", shape=record, style=filled, fillcolor=white];
-Cola_Espera_Carritos_13 -> Cola_Espera_Carritos_14;
-Cola_Espera_Carritos_15[label="Cliente_15", shape=record, style=filled, fillcolor=white];
-Cola_Espera_Carritos_14 -> Cola_Espera_Carritos_15;
-Cola_Espera_Carritos_16[label="Cliente_16", shape=record, style=filled, fillcolor=white];
-Cola_Espera_Carritos_15 -> Cola_Espera_Carritos_16;
-Cola_Espera_Carritos_17[label="Cliente_17", shape=record, style=filled, fillcolor=white];
-Cola_Espera_Carritos_16 -> Cola_Espera_Carritos_17;
 
 }
 
@@ -30,6 +11,41 @@ subgraph cluster_Pila_1{
 label="Pila_1"
 style = "filled,rounded";
 color = lightgrey;
+Pila_1_2_10[label="Carrito_1:10", shape=record, style=filled, fillcolor=white];
+Pila_1_2_10 -> Pila_1_1_2;
+Pila_1_1_2[label="Carrito_1:2", shape=record, style=filled, fillcolor=white];
+Pila_1_1_2 -> Pila_1_2_14;
+Pila_1_2_14[label="Carrito_1:14", shape=record, style=filled, fillcolor=white];
+Pila_1_2_14 -> Pila_1_1_8;
+Pila_1_1_8[label="Carrito_1:8", shape=record, style=filled, fillcolor=white];
+Pila_1_1_8 -> Pila_1_1_23;
+Pila_1_1_23[label="Carrito_1:23", shape=record, style=filled, fillcolor=white];
+Pila_1_1_23 -> Pila_1_2_20;
+Pila_1_2_20[label="Carrito_1:20", shape=record, style=filled, fillcolor=white];
+Pila_1_2_20 -> Pila_1_2_21;
+Pila_1_2_21[label="Carrito_1:21", shape=record, style=filled, fillcolor=white];
+Pila_1_2_21 -> Pila_1_2_22;
+Pila_1_2_22[label="Carrito_1:22", shape=record, style=filled, fillcolor=white];
+Pila_1_2_22 -> Pila_1_1_20;
+Pila_1_1_20[label="Carrito_1:20", shape=record, style=filled, fillcolor=white];
+Pila_1_1_20 -> Pila_1_1_16;
+Pila_1_1_16[label="Carrito_1:16", shape=record, style=filled, fillcolor=white];
+Pila_1_1_16 -> Pila_1_2_24;
+Pila_1_2_24[label="Carrito_1:24", shape=record, style=filled, fillcolor=white];
+Pila_1_2_24 -> Pila_1_2_16;
+Pila_1_2_16[label="Carrito_1:16", shape=record, style=filled, fillcolor=white];
+Pila_1_2_16 -> Pila_1_2_6;
+Pila_1_2_6[label="Carrito_1:6", shape=record, style=filled, fillcolor=white];
+Pila_1_2_6 -> Pila_1_1_24;
+Pila_1_1_24[label="Carrito_1:24", shape=record, style=filled, fillcolor=white];
+Pila_1_1_24 -> Pila_1_2_19;
+Pila_1_2_19[label="Carrito_1:19", shape=record, style=filled, fillcolor=white];
+Pila_1_2_19 -> Pila_1_2_9;
+Pila_1_2_9[label="Carrito_1:9", shape=record, style=filled, fillcolor=white];
+Pila_1_2_9 -> Pila_1_1_3;
+Pila_1_1_3[label="Carrito_1:3", shape=record, style=filled, fillcolor=white];
+Pila_1_1_3 -> Pila_1_1_10;
+Pila_1_1_10[label="Carrito_1:10", shape=record, style=filled, fillcolor=white];
 
 }
 
@@ -37,6 +53,69 @@ subgraph cluster_Pila_2{
 label="Pila_2"
 style = "filled,rounded";
 color = lightgrey;
+Pila_2_2_0[label="Carrito_2:0", shape=record, style=filled, fillcolor=white];
+Pila_2_2_1[label="Carrito_2:1", shape=record, style=filled, fillcolor=white];
+Pila_2_2_0 -> Pila_2_2_1;
+Pila_2_2_2[label="Carrito_2:2", shape=record, style=filled, fillcolor=white];
+Pila_2_2_1 -> Pila_2_2_2;
+Pila_2_2_3[label="Carrito_2:3", shape=record, style=filled, fillcolor=white];
+Pila_2_2_2 -> Pila_2_2_3;
+Pila_2_2_4[label="Carrito_2:4", shape=record, style=filled, fillcolor=white];
+Pila_2_2_3 -> Pila_2_2_4;
+Pila_2_2_5[label="Carrito_2:5", shape=record, style=filled, fillcolor=white];
+Pila_2_2_4 -> Pila_2_2_5;
+Pila_2_2_5 -> Pila_2_1_15;
+Pila_2_1_15[label="Carrito_2:15", shape=record, style=filled, fillcolor=white];
+Pila_2_1_15 -> Pila_2_1_6;
+Pila_2_1_6[label="Carrito_2:6", shape=record, style=filled, fillcolor=white];
+Pila_2_1_6 -> Pila_2_2_7;
+Pila_2_2_7[label="Carrito_2:7", shape=record, style=filled, fillcolor=white];
+Pila_2_2_7 -> Pila_2_1_5;
+Pila_2_1_5[label="Carrito_2:5", shape=record, style=filled, fillcolor=white];
+Pila_2_1_5 -> Pila_2_1_18;
+Pila_2_1_18[label="Carrito_2:18", shape=record, style=filled, fillcolor=white];
+Pila_2_1_18 -> Pila_2_1_13;
+Pila_2_1_13[label="Carrito_2:13", shape=record, style=filled, fillcolor=white];
+Pila_2_1_13 -> Pila_2_1_4;
+Pila_2_1_4[label="Carrito_2:4", shape=record, style=filled, fillcolor=white];
+Pila_2_1_4 -> Pila_2_2_18;
+Pila_2_2_18[label="Carrito_2:18", shape=record, style=filled, fillcolor=white];
+Pila_2_2_18 -> Pila_2_1_21;
+Pila_2_1_21[label="Carrito_2:21", shape=record, style=filled, fillcolor=white];
+Pila_2_1_21 -> Pila_2_2_17;
+Pila_2_2_17[label="Carrito_2:17", shape=record, style=filled, fillcolor=white];
+Pila_2_2_17 -> Pila_2_2_12;
+Pila_2_2_12[label="Carrito_2:12", shape=record, style=filled, fillcolor=white];
+Pila_2_2_12 -> Pila_2_1_7;
+Pila_2_1_7[label="Carrito_2:7", shape=record, style=filled, fillcolor=white];
+Pila_2_1_7 -> Pila_2_1_19;
+Pila_2_1_19[label="Carrito_2:19", shape=record, style=filled, fillcolor=white];
+Pila_2_1_19 -> Pila_2_1_12;
+Pila_2_1_12[label="Carrito_2:12", shape=record, style=filled, fillcolor=white];
+Pila_2_1_12 -> Pila_2_1_0;
+Pila_2_1_0[label="Carrito_2:0", shape=record, style=filled, fillcolor=white];
+Pila_2_1_0 -> Pila_2_1_17;
+Pila_2_1_17[label="Carrito_2:17", shape=record, style=filled, fillcolor=white];
+Pila_2_1_17 -> Pila_2_2_11;
+Pila_2_2_11[label="Carrito_2:11", shape=record, style=filled, fillcolor=white];
+Pila_2_2_11 -> Pila_2_2_15;
+Pila_2_2_15[label="Carrito_2:15", shape=record, style=filled, fillcolor=white];
+Pila_2_2_15 -> Pila_2_1_22;
+Pila_2_1_22[label="Carrito_2:22", shape=record, style=filled, fillcolor=white];
+Pila_2_1_22 -> Pila_2_1_11;
+Pila_2_1_11[label="Carrito_2:11", shape=record, style=filled, fillcolor=white];
+Pila_2_1_11 -> Pila_2_2_23;
+Pila_2_2_23[label="Carrito_2:23", shape=record, style=filled, fillcolor=white];
+Pila_2_2_23 -> Pila_2_1_1;
+Pila_2_1_1[label="Carrito_2:1", shape=record, style=filled, fillcolor=white];
+Pila_2_1_1 -> Pila_2_2_8;
+Pila_2_2_8[label="Carrito_2:8", shape=record, style=filled, fillcolor=white];
+Pila_2_2_8 -> Pila_2_2_13;
+Pila_2_2_13[label="Carrito_2:13", shape=record, style=filled, fillcolor=white];
+Pila_2_2_13 -> Pila_2_1_9;
+Pila_2_1_9[label="Carrito_2:9", shape=record, style=filled, fillcolor=white];
+Pila_2_1_9 -> Pila_2_1_14;
+Pila_2_1_14[label="Carrito_2:14", shape=record, style=filled, fillcolor=white];
 
 }
 
@@ -44,15 +123,6 @@ subgraph cluster_Clientes_Comprando{
 label="Clientes_Comprando"
 style = "filled,rounded";
 color = lightgrey;
-Cola_Espera_Carritos_5[label="{Cliente_5| Carrito_1:0}", shape=record, style=filled, fillcolor=white];
-Cola_Espera_Carritos_6[label="{Cliente_6| Carrito_2:1}", shape=record, style=filled, fillcolor=white];
-Cola_Espera_Carritos_7[label="{Cliente_7| Carrito_2:0}", shape=record, style=filled, fillcolor=white];
-Cola_Espera_Carritos_7 -> Cola_Espera_Carritos_5;
-Cola_Espera_Carritos_7 -> Cola_Espera_Carritos_6;
-Cola_Espera_Carritos_5 -> Cola_Espera_Carritos_6;
-Cola_Espera_Carritos_5 -> Cola_Espera_Carritos_7;
-Cola_Espera_Carritos_6 -> Cola_Espera_Carritos_7;
-Cola_Espera_Carritos_6 -> Cola_Espera_Carritos_5;
 
 }
 
@@ -60,19 +130,28 @@ subgraph cluster_Cajas_Registradoras{
 label="Cajas_Registradoras"
 style = "filled,rounded";
 color = lightgrey;
-Cajas_Registradoras_0[label="{Caja_0|Ocupado por el cliente: 3|Usando el carrito: 1:1|Tiempo de servicio: 3s}", shape=record, style=filled, fillcolor=white];
+Cajas_Registradoras_0[label="{Caja_0| Disponible}", shape=record, style=filled, fillcolor=white];
 Cajas_Registradoras_1[label="{Caja_1| Disponible}", shape=record, style=filled, fillcolor=white];
 Cajas_Registradoras_0 -> Cajas_Registradoras_1;
 Cajas_Registradoras_1 -> Cajas_Registradoras_0;
-Cajas_Registradoras_2[label="{Caja_2|Disponible}", shape=record, style=filled, fillcolor=white];
+Cajas_Registradoras_2[label="{Caja_2| Disponible}", shape=record, style=filled, fillcolor=white];
 Cajas_Registradoras_1 -> Cajas_Registradoras_2;
 Cajas_Registradoras_2 -> Cajas_Registradoras_1;
-Cajas_Registradoras_3[label="{Caja_3|Disponible}", shape=record, style=filled, fillcolor=white];
+Cajas_Registradoras_3[label="{Caja_3| Disponible}", shape=record, style=filled, fillcolor=white];
 Cajas_Registradoras_2 -> Cajas_Registradoras_3;
 Cajas_Registradoras_3 -> Cajas_Registradoras_2;
-Cajas_Registradoras_4[label="{Caja_4|Disponible}", shape=record, style=filled, fillcolor=white];
+Cajas_Registradoras_4[label="{Caja_4| Disponible}", shape=record, style=filled, fillcolor=white];
 Cajas_Registradoras_3 -> Cajas_Registradoras_4;
 Cajas_Registradoras_4 -> Cajas_Registradoras_3;
+Cajas_Registradoras_5[label="{Caja_5| Disponible}", shape=record, style=filled, fillcolor=white];
+Cajas_Registradoras_4 -> Cajas_Registradoras_5;
+Cajas_Registradoras_5 -> Cajas_Registradoras_4;
+Cajas_Registradoras_6[label="{Caja_6| Disponible}", shape=record, style=filled, fillcolor=white];
+Cajas_Registradoras_5 -> Cajas_Registradoras_6;
+Cajas_Registradoras_6 -> Cajas_Registradoras_5;
+Cajas_Registradoras_7[label="{Caja_7| Disponible}", shape=record, style=filled, fillcolor=white];
+Cajas_Registradoras_6 -> Cajas_Registradoras_7;
+Cajas_Registradoras_7 -> Cajas_Registradoras_6;
 
 }
 

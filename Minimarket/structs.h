@@ -114,14 +114,28 @@ namespace structures{
             }
         }
 
-        ~LinkedList(){
-            struct Node<T>* temp;
-            while (head) {
-                temp = head;
-                head = head->next;
-                delete temp;
-            }
+    int getLenght(){
+        if (head == nullptr) return 0;
+        int l = 0;
+        ClientNode* temp = head;
+        while(temp->next != nullptr){
+            l++;
+            temp = temp->next;
+        }
+        return l;
+    }
 
+    void clearList(){
+        struct Node<T>* temp;
+        while (head) {
+            temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+
+        ~LinkedList(){
+            clearList();
         }
 
     };
@@ -266,16 +280,14 @@ namespace structures{
 
 
         void desligateNode(struct BiNode<T> * node){ //Este metodo unicamente desliga el nodo de la lista circualr
-            struct BiNode<T> *front_ = node->next;
-            struct BiNode<T> *back_ = node->prev;
-            if (back_ != NULL) {back_->next = front_;}
-            if (front_ != NULL) {front_->prev = back_;}
-            if (node == head) {
-                if (node->next != NULL){
-                    head = node->next;
-                }else{
-                    head = NULL;
-                }
+            if (node->next == node) { // único elemento
+                head = nullptr;
+            } else {
+                BiNode<T>* front_ = node->next;
+                BiNode<T>* back_  = node->prev;
+                back_->next = front_;
+                front_->prev = back_;
+                if (node == head) head = front_;
             }
             node->next = nullptr;
             node->prev = nullptr;
@@ -284,13 +296,13 @@ namespace structures{
 
         ~DoubleCircleList(){
             if (head == nullptr) return;
-
-            struct BiNode<T>* temp = head;
-            do{
-                struct BiNode<T>* deleter = temp;
-                temp = temp->next;
-                delete deleter;
-            } while(temp != head);
+                head->prev->next = nullptr;
+                BiNode<T>* temp = head;
+                while (temp != nullptr) {
+                    BiNode<T>* deleter = temp;
+                    temp = temp->next;
+                    delete deleter;
+            }
         }
     };
 
@@ -313,15 +325,12 @@ namespace structures{
         struct Node<T>* pop(){
             //eliminar el ultimo
             if (head == nullptr) {
-                std::cout<<"Ya nada"<<std::endl;
                 return nullptr;
-
             }
 
             if (head->next == nullptr){
                 struct Node<T>* temp = head;
                 head = nullptr;
-                std::cout<<"Es el ultimo"<<std::endl;
                 return temp;
             }
             else{

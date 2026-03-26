@@ -176,17 +176,27 @@ namespace dotGenerator{
         public:
 
             SubgraphQueue* getQueue() {return &queue_subgraph;}
+            void resetContext() {
+                context = "digraph MiniMarket {}";
+                generateFile();
+            }
 
-            void updateSubGraphs(){
+            int updateSubGraphs(){
                 // rankdir=LR;
-                context = "digraph MiniMarket {\n\n" + queue_subgraph.getContexts() +"\n}";
+                if (context != "digraph MiniMarket {\n\n" + queue_subgraph.getContexts() +"\n}")
+                {
+                     context = "digraph MiniMarket {\n\n" + queue_subgraph.getContexts() +"\n}";
+                     return 0;
+                }
+                return -1;
 
             }
 
             int generateNewFiles(){
                 //queue_subgraph.print();
-                updateSubGraphs();
-                return generateFile();
+
+                return (updateSubGraphs() == 0) ? generateFile() : 2;
+
             }
 
     };

@@ -42,6 +42,8 @@ public:
         this->tittle = tittle;
     }
 
+    int getGlobalID(){ return globalID;}
+
     SubGraph * getGraph() { return &graph;}
 
     void queueClient(){
@@ -72,11 +74,19 @@ public:
     ClientNode* dequeueClient(){
         ClientNode * last = dequeue();
         if (last != nullptr) {
-            cout<<"borrando "<<last->nameNode<<endl;
             graph.removeNode(last->nameNode, "", "");
         }
         return last;
     }
+
+    int lenght(){
+        return getLenght();
+    }
+
+    void clearQueue(){
+        clearList();
+    }
+
 };
 
 // Stack CARRITOS
@@ -131,7 +141,7 @@ public:
 
             insert(cart);
             string nameNode = cart->nameNode;
-            graph.insertNode(nameNode , nameNode);
+            graph.insertNode(nameNode ,  "Carrito_"+to_string(idGroup)+":"+to_string(cart->data->idCart));
        }
     }
 
@@ -145,6 +155,10 @@ public:
             graph.removeNode(last->nameNode);
         }
         return last;
+    }
+
+    void clearStack(){
+        clearList();
     }
 
 };
@@ -199,12 +213,13 @@ public:
         return nullptr;
     }
 
-//No dice en el docs como un cliente termina de pagar, asi que hice esto para que aumente el tiempo de servicio y cuando llegue a cierto numero, el cliente libere la caja
+    //No dice en el docs como un cliente termina de pagar, asi que hice esto para que aumente el tiempo de servicio y cuando llegue a cierto numero, el cliente libere la caja
     void clockServiceTime(void (*updateGraph)(CashRegisterNode*, Client*)){
         CashRegisterNode * temp = head;
         while(temp != nullptr){
             if (temp->data->state == 1) {
                 temp->data->timeService+=1;
+                cout<<"   - La caja "+ to_string(temp->data->idCashRegister) + " ha estado atendiendo al cliente: "+ to_string(temp->data->client->idClient) + " por "+ to_string(temp->data->timeService) + "s"<<endl;
                 updateGraph(temp, temp->data->client); //usé lo que vimos en clase de punteros void
 
             }
@@ -223,6 +238,15 @@ public:
         return nullptr;
     }
 
+    int allCashIsEmpty(){
+        CashRegisterNode * temp = head;
+        while(temp != nullptr){
+            if (temp->data->state == 1) return -1;
+            temp = temp->next;
+        }
+        return 0;
+    }
+
 
 };
 
@@ -238,7 +262,6 @@ private:
         graph.insertNode(temp->nameNode, name);
         recalculateConectionsGraph(temp);
     }
-
 
     ClientBiNode* createBiNode(ClientNode* client){
         ClientBiNode* new_node  = new ClientBiNode;
@@ -297,13 +320,14 @@ public:
 
     ClientNode* popClientNode(int id){
         ClientBiNode* node_remove = findBiNode(id);
+
         if(node_remove != nullptr){
+            bool onlyNode = (node_remove->next == node_remove);
             desligateNode(node_remove);
             graph.removeNode(node_remove->nameNode);
-            recalculateConectionsGraph(head);
+            if (!onlyNode && head!= nullptr) recalculateConectionsGraph(head);
             return createNode(node_remove); // BiNode -> Node
         }
-        cout<<"Sin remover"<<endl;
         return nullptr;
     }
 
@@ -316,8 +340,10 @@ public:
     }
 
     int findID(int id){
+        if (head == nullptr) return -1;
         ClientBiNode* temp = actual();
         do{
+            if(temp == nullptr) return -1;
             if (temp->data->idClient == id) return 0;
             temp = temp->next;
         }while(temp != actual());

@@ -5,7 +5,6 @@
 #include <cstdlib>
 #include <ctime> //para los numeros aleatorios
 
-#include "gui.h"
 #include "structs.h"
 #include "dotGenerator.h"
 #include "definitions.h"
@@ -13,22 +12,24 @@
 /*NAMESPACES*/
 using namespace std;
 using namespace structures;
-using namespace window;
 using namespace dotGenerator;
 using namespace data_structures;
 
 /*INICIALIZAR LAS FUCNIONES DE ABAJO*/
 int initializerValue(string type);
 int randomBetween(int min_value, int max_value);
-void generateDot();
+int generateDot(bool debugMessage);
 
 void createClients();
+void createClientsCashRegister();
+void createClientsBuy();
 void createCarts();
 void createCashRegisters();
 void graphIntoDotFile();
 
 //PARA LA SIMULACION
-ClientNode* getCart();
+bool endSimulation();
+ClientNode* getCart(bool message);
 void insertBuyClient(ClientNode* client);
 void moveClientToPay();
 void removeClientCashRegister();
@@ -47,59 +48,85 @@ WaitClient wait_client_cashRegister("Cola_Espera_Cajas_Registradoras");
 
 DotFile dot_file;
 
+void simulation(){
+    int attepps = 0;
+
+    while(true){
+        if (endSimulation()) { //TERMINAR LA SIMULACION
+            cout<<endl<<" - El minimarket ha cerrado!"<<endl;
+            break;
+        }
+
+        cout<<"************ PASO "<<attepps<<"************"<<endl;
+        ClientNode* cl = getCart(true);
+        if (cl != nullptr){
+            cout<<"   - Cliente: "<<cl->data->idClient<<", toma el carrito "<<to_string(cl->data->cart->idGroup)+":"+to_string(cl->data->cart->idCart)<<endl;
+            insertBuyClient(cl);
+        }
+
+        //si no le gusta al inge xd  randomBetween(0,100)
+        int ran_1 = randomBetween(0,wait_client_cart.getGlobalID());
+        if (buying_clients.findID(ran_1) == 0)
+        {
+            ClientNode* c = buying_clients.popClientNode(ran_1);
+            if (c != nullptr){
+                cout<<"   - El cliente "<<c->data->idClient<<" pasa a esperar una caja registradora"<<endl;
+                wait_client_cashRegister.add(c);
+            }
+        }else{
+            cout<<"   ! Todos los clientes anteriores siguen comprando"<<endl;
+        }
+
+        moveClientToPay();
+        removeClientCashRegister();
+        Sleep(0);
+        if (generateDot(false) != 0) {
+            cout<<endl<<"  ! Ningun cambio hasta el momento!"<<endl;
+            Sleep(1000);
+        }
+        attepps++;
+
+
+    }
+}
+
+void set_conditions(){
+    createCarts();
+    createCashRegisters();
+    createClients();
+    createClientsCashRegister();
+    createClientsBuy();
+    generateDot(true);
+}
+
 
 /*------------------------------------------------MAIN--------------------------------------------------*/
 int main()
 {
     graphIntoDotFile();
+    cout<<"---------------------------------SIMULACION DE MINIMARKET---------------------------------"<<endl;
+    set_conditions();
 
-    createCarts();
-    createCashRegisters();
-    createClients();
-    generateDot();
-    int af = 0;
-
-    while(af < 20){
-        int ran = randomBetween(0,1);
-        if (ran == 1) wait_client_cart.queueClient();
-
-        cout<<"  - SIGUIENTE PASO "<<endl;
-        ClientNode* cl = getCart();
-
-        if (cl != nullptr){
-            cout<<"Cliente: "<<cl->data->idClient<<", toma carrito: "<<to_string(cl->data->cart->idGroup)+":"+to_string(cl->data->cart->idCart)<<endl;
-            insertBuyClient(cl);
-        }
-
-        int ran_1 = randomBetween(1,10);
-        if (buying_clients.findID(ran_1) == 0)
-        {
-            ClientNode* c = buying_clients.popClientNode(ran_1);
-            cout<<"salio de comprar"<<c->nameNode<<endl;
-            wait_client_cashRegister.add(c);
-        }
-        moveClientToPay();
-        removeClientCashRegister();
-        Sleep(1500);
-        generateDot();
-        af++;
+    string init_str;
+    cout<<endl<<"Condiciones iniciales han sido agregadas!"<<endl;
+    while(init_str != "Y"){
+        cout<<"Quieres iniciar la simulacion? [Y/N]: ";
+        cin>>init_str;
     }
-
-
+    cout<<endl<<endl<<endl<<endl<<endl<<endl<<"Iniciando.."<<endl;
+    simulation();
 
     return 0;
-    //Window win;
-    // HILOS: https://www.geeksforgeeks.org/cpp/multithreading-in-cpp/
-    //thread console_thread(simulacion);
-    //console_thread.detach();
-
-    //return win.run();
 }
 /*------------------------------------------------MAIN--------------------------------------------------*/
 
+bool endSimulation(){ //ya no hay clientes
+    return (cash_registers.allCashIsEmpty() == 0 && wait_client_cart.peekClient() == nullptr && buying_clients.actual() == nullptr) ? true : false;
+}
+
 // INICALIZACION DE CANTIDADES
 void createCarts(){
-    int m = initializerValue("Carritos");
+    int m = initializerValue("CARRITOS");
     for(int i = 0; i < m; i++){
         carts_stk_1.add();
         carts_stk_2.add();
@@ -107,16 +134,43 @@ void createCarts(){
 }
 
 void createCashRegisters(){
-    int m = initializerValue("Cajas de Pago");
+    int m = initializerValue("CAJAS REGISTRADORAS");
     for(int i = 0; i < m; i++){
         cash_registers.add();
     }
 }
 
 void createClients(){
-    int m = initializerValue("Clientes");
+    int m = initializerValue("CLIENTES GENERALES");
     for(int i = 0; i < m; i++){
         wait_client_cart.queueClient();
+    }
+}
+
+// COMO ESTOY REUTILIZNDO CLIENTES, AGREGO EXCEPCIONES PARA EVITAR QUE SE AÑADAN MAS CLIENTES DE LOS QUE HAY A LAS OTRAS LISTAS
+void createClientsCashRegister(){
+
+    int m = initializerValue("CLIENTES EN ESPERA DE UNA CAJA REGISTRADORAS");
+    for(int i = 0; i < m; i++){
+        wait_client_cart.queueClient();
+        ClientNode* cl = getCart(false);
+        if (cl != nullptr){
+            wait_client_cashRegister.add(cl);
+        }
+    }
+}
+
+void createClientsBuy(){
+    int m = initializerValue("CLIENTES COMPRANDO");
+
+
+
+    for(int i = 0; i < m; i++){
+        wait_client_cart.queueClient();
+        ClientNode* cl = getCart(false);
+        if (cl != nullptr){
+            insertBuyClient(cl);
+        }
     }
 }
 
@@ -132,9 +186,9 @@ void graphIntoDotFile(){ // Este metodo me ayuda a insertar todos los subgraphs 
 
 }
 
-StackCart* selectCart(){
+StackCart* selectCart(bool message = false){ // Para seleccionar los carritos de los clientes
     if(carts_stk_1.peekCart() == nullptr && carts_stk_2.peekCart() == nullptr){
-        cout<<"Sin carritos disponibles!!"<<endl;
+        if(message) cout<<"   ! Hay "+ to_string(wait_client_cart.lenght()) +" clientes esperando una carreta!"<<endl;
         return nullptr;
     }
 
@@ -154,21 +208,24 @@ StackCart* selectCart(){
 
 }
 
-ClientNode* getCart(){ // Para sacar un cliente de la pila de espera
-    StackCart* stack_use = selectCart();
+ClientNode* getCart(bool message){ // Para sacar un cliente de la pila de espera
+    StackCart* stack_use = selectCart(message);
 
     if (stack_use != nullptr) {
         ClientNode* client = wait_client_cart.dequeueClient();
-        CartNode* cart = stack_use->popCart();
-        client->data->cart = cart->data;
-        delete cart;
-        return client;
+        if(client != nullptr){
+            CartNode* cart = stack_use->popCart();
+            client->data->cart = cart->data;
+            delete cart;
+            return client;
+        }
+        return nullptr;
     } else{
         return nullptr;
     }
 }
 
-void insertBuyClient(ClientNode* client){
+void insertBuyClient(ClientNode* client){ //añadir a cola de compras
     buying_clients.add(client);
 }
 
@@ -195,7 +252,7 @@ void moveClientToPay(){
             empty_cash_register->data->client = client->data;
             updateTextCashRegister(empty_cash_register, client->data);
             delete client;
-            cout<<endl<<"Cliente: "+ to_string(empty_cash_register->data->client->idClient)+ " está siendo atendido en la caja: "<< to_string(empty_cash_register->data->idCashRegister)<<endl;
+            cout<<"   - El cliente: "+ to_string(empty_cash_register->data->client->idClient)+ " esta siendo atendido en la caja: "<< to_string(empty_cash_register->data->idCashRegister)<<endl;
         }
     }
 }
@@ -221,31 +278,37 @@ void removeClientCashRegister(){
         new_node->data = cart;
         new_node->next = nullptr;
 
-
+        int stack_number = 0;
         if (rand == 1) {
             new_node->nameNode = carts_stk_1.getTittle() + "_" +to_string(cart->idGroup) + "_"+to_string(cart->idCart);
             carts_stk_1.add(new_node);
+            stack_number = 0;
         }
         else {
             new_node->nameNode = carts_stk_2.getTittle() + "_" +to_string(cart->idGroup) + "_"+to_string(cart->idCart);
             carts_stk_2.add(new_node);
+            stack_number = 1;
         }
 
-        cout<<"El cliente: "<< to_string(client->idClient) <<" ha salido del minimarket"<<endl;
-        cout<<"La carreta: "<< to_string(cart->idCart) << "ha sido devuleta a la pila: "<<0<<endl;
+        cout<<"   - El cliente: "<< to_string(client->idClient) <<" ha salido del minimarket"<<endl;
+        cout<<"   - La carreta: "<< to_string(cart->idGroup) +":"+to_string(cart->idCart) << " ha sido devuleta a la pila: "<<to_string(stack_number)<<endl;
         delete client;
     }
 }
 
 /*UTILS (FUNCIONES QUE ME SIRVEN EN LA SIMULACION EN GENERAL, MAS QUE TODO ABSTRACCIONES)*/
-void generateDot(){
+int generateDot(bool debugMessage = false){
     int t = dot_file.generateNewFiles();
     if (t == 0){
-        cout<<" $ .dot generador con exito"<<endl;
+        if(debugMessage) cout<<" $ .dot generador con exito"<<endl;
+        return 0;
+    } else if (t == 2) {
+         if(debugMessage) cout<<" $ .ya generado"<<endl;
+         return 1;
     } else{
-        cout<<" x Error al crear el .dot"<<endl;
+        if(debugMessage) cout<<" x Error al crear el .dot"<<endl;
+        return -1;
     }
-
 }
 
 int randomBetween(int min_value, int max_value){
@@ -257,7 +320,6 @@ int randomBetween(int min_value, int max_value){
 int initializerValue(string type){
     int val;
     do{
-        cout<<"--------------------------------------------------------------------------"<<endl;
         cout<<" > Ingresa la cantidad de " + type + " que va a haber en la simulacion: ";
         cin>>val;
 
